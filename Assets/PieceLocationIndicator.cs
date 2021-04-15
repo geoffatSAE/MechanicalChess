@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PieceLocationIndicator : MonoBehaviour
 {
-    public Renderer r;
+    public Renderer rPawn, rKing;
 
     public Material red, transparent;
 
@@ -28,18 +28,39 @@ public class PieceLocationIndicator : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        r.material = red;
-        myAudioSource.Play();
+        if(other.tag == "Pawn")
+        {
+            rPawn.material = red;
+            myAudioSource.Play();
 
-        //create haptic clip and pass to right controller
-        OVRHapticsClip ovrClip = new OVRHapticsClip(soundFX);
-        OVRHaptics.RightChannel.Preempt(ovrClip);
-        OVRHaptics.LeftChannel.Preempt(ovrClip);
+            //create haptic clip and pass to right controller
+            OVRHapticsClip ovrClip = new OVRHapticsClip(soundFX);
+            OVRHaptics.RightChannel.Preempt(ovrClip);
+            OVRHaptics.LeftChannel.Preempt(ovrClip);
+
+        } else if (other.tag == "King")
+        {
+            rKing.material = red;
+            myAudioSource.Play();
+
+            //create haptic clip and pass to right controller
+            OVRHapticsClip ovrClip = new OVRHapticsClip(soundFX);
+            OVRHaptics.RightChannel.Preempt(ovrClip);
+            OVRHaptics.LeftChannel.Preempt(ovrClip);
+
+
+        } else
+        {
+            //not king or pawn, so do nothing
+        }
+
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
         //r.material.color = Color.grey;
-        r.material = transparent;
+        rPawn.material = transparent;
+        rKing.material = transparent;
     }
 }
